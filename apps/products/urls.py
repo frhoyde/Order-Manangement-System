@@ -1,9 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .apis.order_api import OrderViewSet
+from .apis.product_api import ProductViewSet
 
 router = DefaultRouter()
-router.register(r'', OrderViewSet, basename='')
+router.register(r'', ProductViewSet, basename='')
 
 urlpatterns = [
     path('', include(router.urls)),
