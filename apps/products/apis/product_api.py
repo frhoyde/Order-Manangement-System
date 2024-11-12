@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from ..services.product_services import ProductService
+from ..serializers.product_serializer import MutateProductSerializer
+from drf_yasg.utils import swagger_auto_schema
 
 class ProductViewSet(ViewSet):
     def __init__(self, **kwargs):
@@ -21,6 +23,7 @@ class ProductViewSet(ViewSet):
             status=status.HTTP_404_NOT_FOUND
         )
     
+    @swagger_auto_schema(request_body=MutateProductSerializer)
     def create(self, request):
         try:
             product = self.service.create_product(request.data)
@@ -31,6 +34,7 @@ class ProductViewSet(ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
+    @swagger_auto_schema(request_body=MutateProductSerializer)
     def update(self, request, pk=None):
         try:
             product = self.service.update_product(pk, request.data)

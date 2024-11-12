@@ -1,5 +1,6 @@
 from typing import List, Optional
 from ..models.order import Order, OrderItem
+from apps.products.models.product import Product
 
 class OrderRepository:
     def create_order(self, total_amount: float) -> Order:
@@ -7,13 +8,15 @@ class OrderRepository:
             total_amount = total_amount
         )
     
-    def create_order_item(self, order: Order, product: str, quantity: int, price: float) -> OrderItem:
-        return Order.objects.create(
+    def create_order_item(self, order: Order, product_id: int, quantity: int) -> OrderItem:
+        return OrderItem.objects.create(
             order=order,
-            product=product,
+            product_id=product_id,
             quantity=quantity,
-            price=price
         )
+
+    def get_all_orders(self) -> List[Order]:
+        return Order.objects.all()
 
     def get_order_by_id(self, order_id: int) -> Optional[Order]:
         return Order.objects.filter(id=order_id).first()

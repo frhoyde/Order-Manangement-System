@@ -1,53 +1,59 @@
-from decimal import Decimal
 from typing import List, Optional
 from django.db import transaction
 from ..repositories.order_repository import OrderRepository
 from ..serializers.order_serializer import OrderSerializer
+from apps.products.repositories.product_repository import ProductRepository
 
 
 class OrderService:
     def __init__(self):
         self.order_repository = OrderRepository()
+        self.product_repository = ProductRepository()
 
-    def create_order(self, items_data: List[dict]) -> dict: 
-        with transaction.atomic():
-            total_amount = Decimal('0')
-            validated_items = []
-
-            for item in items_data:
-                if len(item) < 0:
-                    print("Error!")
+    def create_order(self, items_data: List[dict]) -> dict:
+            """Create a new order with items."""
+            with transaction.atomic():
+                total_amount = float(0.0)
+                validated_items = []
                 
-                item_total = item['price'] * item['quantity']
-                total_amount = item_total
-
-                validated_items.append({
-                    'product': item['product'],
-                    'quantity': item['quantity'],
-                    'price': item['price']
-                })
-
-            order = self.order_repository.create_order(
+                for item in items_data:
+                    product = self.product_repository.get_by_id(item['product_id'])
+                    if not product:
+                        raise Exception(f"Product {item['product_id']} not found")
+                    
+                    item_total = product.price * item['quantity']
+                    total_amount += item_total
+                    validated_items.append({
+                        'product': product,
+                        'quantity': item['quantity'],
+                        'price': product.price
+                    })
+                
+                # Create order
+                order = self.order_repository.create_order(
                 total_amount=total_amount
             )
-
+            
+            # Create order items
             for item in validated_items:
                 self.order_repository.create_order_item(
                     order=order,
-                    product=item['product'],
+                    product_id=item['product'].id,
                     quantity=item['quantity'],
-                    price=item['price']
                 )
-
+            
             return OrderSerializer(order).data
     
+    def get_all_orders(self) -> List[dict]:
+        orders = self.order_repository.get_all_orders()
+        return OrderSerializer(orders, many=True).data
+
     def get_Order(self, order_id: int) -> Optional[dict]:
         order = self.order_repository.get_order_by_id(order_id)
-
-        return OrderSerializer(order.data) if order else None
+        return OrderSerializer(order).data if order else None
     
     def update_order_status(self, order_id: int, status: str) -> Optional[dict]:
-        order = self.order_repository.get_order_by_id
+        order = self.order_repository.get_order_by_id(order_id)
 
         if not order:
             return None
