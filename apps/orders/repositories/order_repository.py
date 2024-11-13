@@ -1,7 +1,6 @@
 from typing import List, Optional
 from ..models.order import Order, OrderItem
 from apps.products.models.product import Product
-
 class OrderRepository:
     def create_order(self, total_amount: float) -> Order:
         return Order.objects.create(
@@ -21,10 +20,10 @@ class OrderRepository:
     def get_order_by_id(self, order_id: int) -> Optional[Order]:
         return Order.objects.filter(id=order_id).first()
 
-    def update_order_status(self, order_id: int, status: str) -> Optional[Order]:
+    def update_order_status(self, order_id: int) -> Optional[Order]:
         order = self.get_order_by_id(order_id)
+        order.sm.flow()
         if order:
-            order.status = status
             order.save()
         return order
 

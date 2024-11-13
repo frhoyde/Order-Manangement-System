@@ -21,6 +21,3 @@ class CreateOrderItemSerializer(serializers.Serializer):
 
 class CreateOrderSerializer(serializers.Serializer):
     items = CreateOrderItemSerializer(many=True)
-
-class UpdateOrderStatusSerializer(serializers.Serializer):
-    status = serializers.CharField(min_length=1)

@@ -52,12 +52,12 @@ class OrderService:
         order = self.order_repository.get_order_by_id(order_id)
         return OrderSerializer(order).data if order else None
     
-    def update_order_status(self, order_id: int, status: str) -> Optional[dict]:
+    def update_order_status(self, order_id: int) -> Optional[dict]:
         order = self.order_repository.get_order_by_id(order_id)
 
         if not order:
             return None
 
-        updated_order = self.order_repository.update_order_status(order_id, status)
+        updated_order = self.order_repository.update_order_status(order_id)
 
         return OrderSerializer(updated_order).data if updated_order else None

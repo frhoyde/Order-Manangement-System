@@ -1,17 +1,16 @@
 from django.db import models
 from django.conf import settings
 from apps.products.models.product import Product
+from statemachine.mixins import MachineMixin
+from apps.orders.models.state_machine import StateService
+from pathlib import Path
 
-class  Order(models.Model):
-    STATUS_CHOICES = (
-        ('pending', 'PENDING'),
-        ('paid', "PAID"),
-        ('shipped', 'SHIPPED'),
-        ('delivered', 'DELIVERED'),
-        ('cancelled', 'CANCELLED'),
-    )
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+class  Order(models.Model, MachineMixin):
+    state_machine_attr = 'sm'
+    state_field_name = 'status'
+    state_machine_name = 'StateService'
+    status = models.CharField(max_length=100)
     total_amount = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

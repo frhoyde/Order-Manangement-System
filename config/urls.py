@@ -24,9 +24,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Your API",
+      title="Order Management API",
       default_version='v1',
-      description="Your API description",
+      description="Order Management System",
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
