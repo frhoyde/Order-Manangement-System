@@ -3,9 +3,11 @@ from ..models.order import Order, OrderItem
 from apps.products.models.product import Product
 class OrderRepository:
     def create_order(self, total_amount: float) -> Order:
-        return Order.objects.create(
-            total_amount = total_amount
+        order = Order.objects.create(
+            total_amount = total_amount,
+            status = 'pending'
         )
+        return order
     
     def create_order_item(self, order: Order, product_id: int, quantity: int) -> OrderItem:
         return OrderItem.objects.create(

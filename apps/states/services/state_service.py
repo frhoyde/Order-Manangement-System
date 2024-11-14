@@ -8,6 +8,8 @@ class StateService(StateMachine):
     delivered = State('Delivered', value="delivered", final=True)
     cancelled = State('Cancelled', value="cancelled", final=True)
 
+
+    create_order = pending.to(pending)
     flow = pending.to(paid) | paid.to(shipped) | shipped.to(delivered)
     any_to_cancel = cancelled.from_(pending, paid, shipped)
 

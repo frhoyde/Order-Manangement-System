@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from apps.products.models.product import Product
 from statemachine.mixins import MachineMixin
-from apps.orders.models.state_machine import StateService
+from apps.states.services.state_service import StateService
 from pathlib import Path
 
 
