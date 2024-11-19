@@ -6,6 +6,13 @@ from apps.states.services.state_service import StateService
 from pathlib import Path
 
 
+class OrderType(models.Model):
+    customer_type = models.CharField()
+    service_type = models.CharField()
+
+    class Meta:
+        unique_together = (('customer_key', 'service_key'))
+
 class  Order(models.Model, MachineMixin):
     state_machine_attr = 'sm'
     state_field_name = 'status'
@@ -14,9 +21,11 @@ class  Order(models.Model, MachineMixin):
     total_amount = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    orderType = models.ForeignKey(OrderType, related_name='order_type_order', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['-created_at']
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_order_items', on_delete=models.CASCADE)

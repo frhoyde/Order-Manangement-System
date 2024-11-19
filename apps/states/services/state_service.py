@@ -1,42 +1,19 @@
 from statemachine import StateMachine
 from statemachine import State
+from ..repositories.state_repository import StateRepository
+from ..serializers.state_serializer import StateSerializer
 
-class StateService(StateMachine):
-    pending = State('Pending', initial=True, value="pending")
-    paid = State('Paid', value="paid")
-    shipped = State('Shipped', value="shipped")
-    delivered = State('Delivered', value="delivered", final=True)
-    cancelled = State('Cancelled', value="cancelled", final=True)
+class StateService():
+    def __init__(self) -> None:
+        self.repository = StateRepository()
+        
 
+    def create_state(self, state_data):
+        state = self.repository.create_state(state_data)
+        serializer = StateSerializer(state)
+        return serializer.data
 
-    create_order = pending.to(pending)
-    flow = pending.to(paid) | paid.to(shipped) | shipped.to(delivered)
-    any_to_cancel = cancelled.from_(pending, paid, shipped)
+    def delete_state(self, state_id):
+        pass
 
-    def before_transition(self, event, state):
-
-        print(f"Before '{event}', on the '{state.id}' state.")
-
-        return "before_transition_return"
-
-
-    def on_transition(self, event, state):
-
-        print(f"On '{event}', on the '{state.id}' state.")
-
-        return "on_transition_return"
-
-
-    def on_exit_state(self, event, state):
-
-        print(f"Exiting '{state.id}' state from '{event}' event.")
-
-
-    def on_enter_state(self, event, state):
-
-        print(f"Entering '{state.id}' state from '{event}' event.")
-
-
-    def after_transition(self, event, state):
-
-        print(f"After '{event}', on the '{state.id}' state.")
+    
