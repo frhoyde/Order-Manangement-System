@@ -14,6 +14,8 @@ class StateService():
         return serializer.data
 
     def delete_state(self, state_id):
-        pass
+        state = self.repository.delete_state(state_id)
+        serializer = StateSerializer(state)
+        return serializer.data
 
     

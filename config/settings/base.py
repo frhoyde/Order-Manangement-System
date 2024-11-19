@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # Local apps
     'apps.orders',
     'apps.products',
+    'apps.states'
 ]
 
 from .base import *
