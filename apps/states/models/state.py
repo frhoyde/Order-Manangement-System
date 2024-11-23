@@ -24,13 +24,12 @@ class  Event(models.Model):
     
 class  State(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    value = models.IntegerField(unique=True)
 
     is_initial = models.BooleanField(default=False)
     is_final = models.BooleanField(default=False)
-    
+
     class Meta:
-        ordering = ['value']
+        ordering = ['id']
 
 
     

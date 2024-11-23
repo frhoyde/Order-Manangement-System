@@ -11,7 +11,7 @@ class StateService():
         existing_states = self.repository.get_all_states()
 
         for i in existing_states:
-            states[i.value] = State(i.name, i.value, initial=i.is_initial, final=i.is_final)
+            states[i.id] = State(i.name, i.id, initial=i.is_initial, final=i.is_final)
         
         events = dict()
 

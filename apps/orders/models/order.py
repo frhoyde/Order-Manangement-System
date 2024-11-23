@@ -9,7 +9,7 @@ class OrderType(models.Model):
     
     class Meta:
         unique_together = (('customer_type', 'service_type'),)
-        db_table = 'orders_ordertype'  # explicitly set table name
+        db_table = 'orders_ordertype'  
         
     def __str__(self):
         return f"{self.customer_type} - {self.service_type}"
@@ -32,7 +32,7 @@ class Order(models.Model, MachineMixin):
     
     class Meta:
         ordering = ['-created_at']
-        db_table = 'orders_order'  # explicitly set table name
+        db_table = 'orders_order'  
         
     def __str__(self):
         return f"Order {self.id} - {self.status}"
@@ -40,18 +40,18 @@ class Order(models.Model, MachineMixin):
 class OrderItem(models.Model):
     order = models.ForeignKey(
         Order, 
-        related_name='items',  # changed from 'order' to 'items'
+        related_name='items', 
         on_delete=models.CASCADE
     )
     product = models.ForeignKey(
         Product, 
-        related_name='order_items',  # changed from 'order_item_product'
+        related_name='order_items',  
         on_delete=models.CASCADE
     )
     quantity = models.PositiveIntegerField()
     
     class Meta:
-        db_table = 'orders_orderitem'  # explicitly set table name
+        db_table = 'orders_orderitem'  
         
     def __str__(self):
         return f"OrderItem {self.id} for Order {self.order.id}"

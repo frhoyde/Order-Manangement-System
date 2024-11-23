@@ -11,9 +11,9 @@ class StateSeeder:
             print('Seeding States')
             for el in self.constants.default_states:
                 obj = self.state_repository.create_state({**el})
-                print(f'name: {obj.name}, value: {obj.value}, initial: {obj.is_initial}, final: {obj.is_final}')
+                print(f'name: {obj.name}, value: {obj.id}, initial: {obj.is_initial}, final: {obj.is_final}')
 
         else:
             print(f'States already Exist! Count: {len(existing_states)}')
             for obj in existing_states:
-                print(f'name: {obj.name}, value: {obj.value}, initial: {obj.is_initial}, final: {obj.is_final}')
+                print(f'name: {obj.name}, value: {obj.id}, initial: {obj.is_initial}, final: {obj.is_final}')
