@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from apps.products.models.product import Product
-
+from apps.orders.models.order import OrderType
 class  Event(models.Model):
     name = models.CharField(max_length=100)
 
@@ -17,6 +17,7 @@ class  Event(models.Model):
         related_query_name='event_destination'
     )
 
+    orderType = models.ForeignKey(OrderType, related_name='events', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['name']
