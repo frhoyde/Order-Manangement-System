@@ -8,11 +8,12 @@ from pathlib import Path
 
 
 class OrderType(models.Model):
-    customer_type = models.CharField()
-    service_type = models.CharField()
+    customer_type = models.CharField(max_length=100)
+    service_type = models.CharField(max_length=100)
 
     event = models.OneToOneField(
         Event,
+        
         on_delete=models.CASCADE
     )
 

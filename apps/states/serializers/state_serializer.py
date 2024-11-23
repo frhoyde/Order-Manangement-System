@@ -5,4 +5,4 @@ class StateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = State
-        fields = ['name', 'value', 'is_initial', 'is_final']
+        fields = ['id', 'name', 'value', 'is_initial', 'is_final']

@@ -10,7 +10,10 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+from apps.states.state_seeder import StateSeeder
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.base')
+
+StateSeeder()
 
 application = get_wsgi_application()

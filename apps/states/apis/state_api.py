@@ -30,6 +30,18 @@ class StateViewSet(viewsets.ViewSet):
                 { 'error': str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+    
+    def list(self, request):
+
+        try:
+            states = self.service.get_states()
+
+            return Response(states, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                { 'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def delete(self, request, pk=None):
         state = self.service.delete_state(pk)
