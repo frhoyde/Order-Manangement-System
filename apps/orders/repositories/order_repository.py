@@ -2,13 +2,17 @@ from typing import List, Optional
 from ..models.order import Order, OrderItem, OrderType
 from apps.products.models.product import Product
 class OrderRepository:
-    def create_order(self, total_amount: float) -> Order:
-        order = Order.objects.create(
-            total_amount = total_amount,
-            status = 1
-        )
-        print(f"State {order.sm.current_state.name}")
-        return order
+    def create_order(self, total_amount: float, order_type: OrderType) -> Order:
+        try:
+            order = Order.objects.create(
+                total_amount=total_amount,
+                status='1',  # Assuming 1 is the initial status
+                order_type=order_type  # Use the object directly instead of order_type_id
+            )
+            return order
+        except Exception as e:
+            raise ValueError({"detail": f"Failed to create order: {str(e)}"})
+
     
     def create_order_item(self, order: Order, product_id: int, quantity: int) -> OrderItem:
         return OrderItem.objects.create(
@@ -33,9 +37,10 @@ class OrderRepository:
     def get_order_by_id(self, order_id: int) -> Optional[Order]:
         return Order.objects.filter(id=order_id).first()
 
-    def update_order_status(self, order_id: int) -> Optional[Order]:
-        order = self.get_order_by_id(order_id)
-        order.sm.flow()
+    def get_order_type_by_id(self, order_type_id: int) -> Optional[OrderType]:
+        return OrderType.objects.filter(id=order_type_id).first()
+
+    def update_order_status(self, order: Order) -> Optional[Order]:
         if order:
             order.save()
         return order

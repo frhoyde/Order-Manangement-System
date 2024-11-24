@@ -19,15 +19,13 @@ class OrderViewSet(viewsets.ViewSet):
 
         try:
             order = self.service.create_order(
+                order_type_id=serializer.validated_data['order_type_id'],
                 items_data=serializer.validated_data['items']
             )
 
             return Response(order, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return Response(
-                { 'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            raise e
 
     def list(self, request):
         orders = self.service.get_all_orders()

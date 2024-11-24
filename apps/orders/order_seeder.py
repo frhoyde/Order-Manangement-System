@@ -17,4 +17,4 @@ class OrderSeeder:
         else:
             print(f'Order Types already Exist! Count: {len(existing_order_types)}')
             for order_type in existing_order_types:
-                print(f'{order_type.customer_type} - {order_type.service_type}')
+                print(f'{order_type.id} - {order_type.customer_type} - {order_type.service_type}')

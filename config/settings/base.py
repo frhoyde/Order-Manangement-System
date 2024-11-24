@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
         
     # Local apps
+    'apps.core',
     'apps.orders',
     'apps.products',
     'apps.states'

@@ -1,42 +1,42 @@
 from statemachine import StateMachine
 from statemachine import State, Event
 from ..repositories.state_repository import StateRepository
+from ..services.event_service import EventService
 from ..serializers.state_serializer import StateSerializer
 
 class StateService():
     def __init__(self) -> None:
-        self.repository = StateRepository()
+        self.state_repository = StateRepository()
+        self.event_service = EventService()
 
-        states = dict()
-        existing_states = self.repository.get_all_states()
+        # states = dict()
+        # existing_states = self.state_repository.get_all_states()
 
-        for i in existing_states:
-            states[i.id] = State(i.name, i.id, initial=i.is_initial, final=i.is_final)
-        
-        events = dict()
+        # for i in existing_states:
+        #     states[i.id] = State(i.name, i.id, initial=i.is_initial, final=i.is_final)
 
-        transitions = list()
+        # self.events = dict()
 
-        existing_events = self.repository.get_all_events()
-        
-        for event in existing_events:
-            sources = event.sources
-            destinations = event.destinations
-            for source, index in enumerate(sources):
-                transitions.append(source.to(destinations[index]))
+        # transitions = list()
+
+        # existing_events = self.event_service.get_all_events()
+
+        # for event in existing_events:
+        #     for idx, source in enumerate(event['sources']):
+        #         transitions.append(states[source].to(states[event['destinations'][idx]]))
             
 
-            events[event.name] = transitions
-            transitions.clear()
-
+        #     self.events[event['id']] = Event(transitions=transitions, name=event['name'], id=event['id'])
+        #     print(self.events[event['id']])
+        
 
     def create_state(self, state_data):
-        state = self.repository.create_state(state_data)
+        state = self.state_repository.create_state(state_data)
         serializer = StateSerializer(state)
         return serializer.data
     
     def get_states(self):
-        states = self.repository.get_all_states()
+        states = self.state_repository.get_all_states()
         serializer = StateSerializer(states, many=True)
         return serializer.data
 

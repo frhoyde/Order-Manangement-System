@@ -16,4 +16,4 @@ class StateSeeder:
         else:
             print(f'States already Exist! Count: {len(existing_states)}')
             for obj in existing_states:
-                print(f'name: {obj.name}, value: {obj.id}, initial: {obj.is_initial}, final: {obj.is_final}')
+                print(f'{obj.id} - name: {obj.name}, value: {obj.id}, initial: {obj.is_initial}, final: {obj.is_final}')
