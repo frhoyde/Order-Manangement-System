@@ -11,20 +11,15 @@ class EventService():
     
 
     def create_event(self, event_data: dict) -> Event:
-        serializer = EventCreateSerializer(data=event_data)
         
-        print(event_data['sources'])
-        if not serializer.is_valid():
-            raise ValidationError(serializer.errors)
-
-        validated_data = serializer.validated_data
-        
-        return self.event_repository.create_event(
-            name=validated_data['name'],
-            sources=validated_data['sources'],
-            destinations=validated_data['destinations'],
-            order_type=validated_data['orderType']
+        event = self.event_repository.create_event(
+            name=event_data['name'],
+            sources=event_data['sources'],
+            destinations=event_data['destinations'],
+            order_type=event_data['orderType']
         )
+        serializer = EventSerializer(event)
+        return serializer.data
 
     def get_available_events(self, order_type_id: int) -> List[Event]:
         events = self.event_repository.get_events_by_order_type(

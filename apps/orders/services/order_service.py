@@ -6,6 +6,7 @@ from ..serializers.order_serializer import OrderSerializer, OrderTypeSerializer
 from apps.products.repositories.product_repository import ProductRepository
 from apps.states.services.event_service import EventService
 from apps.states.services.state_service import StateService
+from apps.core.state_machine import StateMachineService
 
 
 class OrderService:
@@ -14,6 +15,7 @@ class OrderService:
         self.product_repository = ProductRepository()
         self.event_service = EventService()
         self.state_service = StateService()
+        self.state_machine_service = StateMachineService()
 
     def create_order(self, order_type_id: int, items_data: dict) -> dict:
         with transaction.atomic():
@@ -82,7 +84,7 @@ class OrderService:
         order = self.order_repository.get_order_by_id(order_id)
         return OrderSerializer(order).data if order else None
     
-    def update_order_status(self, order_id: int, event_id) -> Optional[dict]:
+    def update_order_status(self, order_id: int, event_id: int) -> Optional[dict]:
         order = self.order_repository.get_order_by_id(order_id)
 
         if not order:
@@ -94,9 +96,10 @@ class OrderService:
             raise Exception(f"Event {event_id} not found")
         
         
-        self.state_service.events[event_id].trigger(order.sm)
+        # print(self.state_machine_service.events[1].name)
+        order.sm.trigger_event(event_id)
 
-
+        print(order)
         updated_order = self.order_repository.update_order_status(order)
 
         return OrderSerializer(updated_order).data if updated_order else None

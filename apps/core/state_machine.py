@@ -23,6 +23,8 @@ class StateMachineService(StateMachine):
                 initial=state.is_initial,
                 final=state.is_final
             )
+        print(self.states)
+        
         
         # Load transitions and events from database
         existing_events = self.event_service.get_all_events()
@@ -39,9 +41,10 @@ class StateMachineService(StateMachine):
                 # Create the event with its transitions
                 self._events[event['id']] = Event(
                     name=event['name'],
-                    value=event['id'],
+                    id=event['id'],
                     transitions=transitions
                 )
+            
         
     
     @property
@@ -61,9 +64,8 @@ class StateMachineService(StateMachine):
     
     def trigger_event(self, event_id):
         """Trigger a specific event by ID"""
-        event = self._events.get(event_id)
+        event = self._events[int(event_id)]
         if event:
-            if event.can_run(self):
-                event.run(self)
-                return True
-        return False
+            print(event.name)
+            print(self.current_state)
+            event.__call__(self)

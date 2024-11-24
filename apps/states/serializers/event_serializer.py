@@ -6,6 +6,7 @@ from apps.orders.models.order import OrderType
 
 class EventSerializer(serializers.ModelSerializer):
 
+
     class Meta:
         model = Event
         fields = ['id', 'name', 'sources', 'destinations', 'orderType_id']

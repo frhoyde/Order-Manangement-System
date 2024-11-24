@@ -16,7 +16,6 @@ class EventViewSet(viewsets.ViewSet):
     
     @swagger_auto_schema(request_body=EventCreateSerializer)
     def create(self, request):
-        print(request.data)
         serializer = EventCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -30,10 +29,7 @@ class EventViewSet(viewsets.ViewSet):
 
             return Response(event, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return Response(
-                { 'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            raise e
     
     def retrieve(self, request, pk):
         try:

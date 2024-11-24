@@ -2,7 +2,7 @@ from typing import Any
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 # from rest_framework.permissions import IsAuthenticated
-from ..serializers.order_serializer import CreateOrderSerializer
+from ..serializers.order_serializer import CreateOrderSerializer, UpdateOrderSerializer
 from ..services.order_service import OrderService
 from drf_yasg.utils import swagger_auto_schema
 
@@ -41,8 +41,11 @@ class OrderViewSet(viewsets.ViewSet):
             status=status.HTTP_404_NOT_FOUND
         )
 
+    @swagger_auto_schema(request_body=UpdateOrderSerializer)
     def update(self, request, pk=None):
-        order = self.service.update_order_status(pk)
+        serializer = UpdateOrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        order = self.service.update_order_status(serializer.validated_data['event_id'] ,pk)
 
         if order:
             return Response(order, status=status.HTTP_200_OK)

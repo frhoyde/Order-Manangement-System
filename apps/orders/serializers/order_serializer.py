@@ -27,3 +27,6 @@ class CreateOrderItemSerializer(serializers.Serializer):
 class CreateOrderSerializer(serializers.Serializer):
     items = CreateOrderItemSerializer(many=True)
     order_type_id = serializers.IntegerField()
+
+class UpdateOrderSerializer(serializers.Serializer):
+    event_id = serializers.IntegerField()
