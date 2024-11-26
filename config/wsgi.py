@@ -12,12 +12,10 @@ import os
 from django.core.wsgi import get_wsgi_application
 from apps.states.state_seeder import StateSeeder
 from apps.orders.order_seeder import OrderSeeder
-from apps.core.state_machine import StateMachineService
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.base')
 
 StateSeeder()
 OrderSeeder()
-StateMachineService()
 
 application = get_wsgi_application()

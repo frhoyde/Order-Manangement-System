@@ -96,10 +96,8 @@ class OrderService:
             raise Exception(f"Event {event_id} not found")
         
         
-        # print(self.state_machine_service.events[1].name)
-        order.sm.trigger_event(event_id)
+        order.sm.trigger_event(1)
 
-        print(order)
         updated_order = self.order_repository.update_order_status(order)
 
         return OrderSerializer(updated_order).data if updated_order else None

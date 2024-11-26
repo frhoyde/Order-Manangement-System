@@ -1,71 +1,46 @@
 from statemachine import State, StateMachine, Event
+from statemachine.transition_list import TransitionList
 
 class StateMachineService(StateMachine):
     def __init__(self, model=None, state_field='status', *args, **kwargs):
         from apps.states.repositories.state_repository import StateRepository
         from apps.states.services.event_service import EventService
         
-        self.model = model
         self.state_field = state_field
         self.state_repository = StateRepository()
         self.event_service = EventService()
         
-        # Get all states and events before initializing
-        self.states = {}
-        self._events = {}
-        
         # Load states from database
         existing_states = self.state_repository.get_all_states()
         for state in existing_states:
-            self.states[state.id] = State(
+            x = self.__class__.add_state("_".join(state.name.lower().split(' ')), State(
                 name=state.name,
-                value=state.id,  # Use ID as the value
+                value=state.id,  
                 initial=state.is_initial,
                 final=state.is_final
-            )
-        print(self.states)
+            ))
         
         
-        # Load transitions and events from database
+        state_attributes = [s.id for s in self.__class__.states]
         existing_events = self.event_service.get_all_events()
+
         for event in existing_events:
-            transitions = []
-            # Create transitions for each source-destination pair
+            transitions = TransitionList()
             for source, destination in zip(event['sources'], event['destinations']):
-                if source in self.states and destination in self.states:
-                    transitions.append(
-                        self.states[source].to(self.states[destination])
-                    )
+                    transitions.add_transitions(self.__class__.states.__getattr__(state_attributes[source - 1]).to(self.__class__.states.__getattr__(state_attributes[destination - 1])))
             
-            if transitions:
-                # Create the event with its transitions
-                self._events[event['id']] = Event(
-                    name=event['name'],
-                    id=event['id'],
-                    transitions=transitions
-                )
+            self.__class__.add_event(event=Event(
+                transitions=transitions,
+                name=event['name'],
+                id=event['name'],
+                _sm=self
+            ))
+        print(StateMachineService.flow)
+
+                
             
         
-    
-    @property
-    def events(self):
-        return self._events
-    
-    def get_state_value(self, state_id):
-        """Get the actual value for a state"""
-        return self.states[state_id].value if state_id in self.states else None
-    
-    def can_transition(self, event_id):
-        """Check if a transition is possible"""
-        event = self._events.get(event_id)
-        if event:
-            return event.can_run(self)
-        return False
     
     def trigger_event(self, event_id):
         """Trigger a specific event by ID"""
-        event = self._events[int(event_id)]
-        if event:
-            print(event.name)
-            print(self.current_state)
-            event.__call__(self)
+        print(StateMachineService.events)
