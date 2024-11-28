@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from apps.products.models.product import Product
 from statemachine.mixins import MachineMixin
-from apps.core.state_machine import StateMachineService
 class OrderType(models.Model):
     customer_type = models.CharField(max_length=100)
     service_type = models.CharField(max_length=100)
@@ -15,6 +14,7 @@ class OrderType(models.Model):
         return f"{self.customer_type} - {self.service_type}"
 
 class Order(models.Model, MachineMixin):
+    from apps.states.state_machine import StateMachineService
     state_machine_name = 'StateMachineService'
     state_machine_attr = 'sm'
     state_field_name = 'status'

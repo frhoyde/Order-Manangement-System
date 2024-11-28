@@ -15,3 +15,6 @@ class StateRepository:
     def get_all_states(self):
         return State.objects.all()
     
+    def delete_state(self, state_id):
+        return State.objects.filter(id=state_id).delete()
+    

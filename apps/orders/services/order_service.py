@@ -6,7 +6,10 @@ from ..serializers.order_serializer import OrderSerializer, OrderTypeSerializer
 from apps.products.repositories.product_repository import ProductRepository
 from apps.states.services.event_service import EventService
 from apps.states.services.state_service import StateService
-from apps.core.state_machine import StateMachineService
+from apps.states.state_machine import StateMachineService
+from apps.core.state_adapter import StateAdapter
+from threading import Event as ThreadingEvent
+from threading import Thread
 
 
 class OrderService:
@@ -96,7 +99,8 @@ class OrderService:
             raise Exception(f"Event {event_id} not found")
         
         
-        order.sm.trigger_event(1)
+        # print(isinstance(order.sm, StateMachineService))
+        order.sm.flow()
 
         updated_order = self.order_repository.update_order_status(order)
 

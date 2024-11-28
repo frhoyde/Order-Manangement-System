@@ -30,3 +30,6 @@ class CreateOrderSerializer(serializers.Serializer):
 
 class UpdateOrderSerializer(serializers.Serializer):
     event_id = serializers.IntegerField()
+
+    class Meta:
+        model = Order

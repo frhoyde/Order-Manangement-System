@@ -45,6 +45,7 @@ class OrderViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         serializer = UpdateOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+       
         order = self.service.update_order_status(serializer.validated_data['event_id'] ,pk)
 
         if order:

@@ -1,11 +1,18 @@
 from rest_framework import serializers
 from ..serializers.state_serializer import StateSerializer
-from apps.orders.serializers.order_serializer import Order
 from ..models.state import Event, State
 from apps.orders.models.order import OrderType
 
 class EventSerializer(serializers.ModelSerializer):
 
+    sources = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=State.objects.all()
+    )
+    destinations = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=State.objects.all()
+    )
 
     class Meta:
         model = Event

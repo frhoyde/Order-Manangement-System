@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
-from apps.products.models.product import Product
 from apps.orders.models.order import OrderType
+from apps.products.models.product import Product
 class  Event(models.Model):
     name = models.CharField(max_length=100)
 

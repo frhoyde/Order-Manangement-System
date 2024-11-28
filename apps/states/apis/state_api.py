@@ -43,7 +43,7 @@ class StateViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    def delete(self, request, pk=None):
+    def destroy(self, request, pk=None):
         state = self.service.delete_state(pk)
 
         if state:

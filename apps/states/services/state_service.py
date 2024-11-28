@@ -38,11 +38,10 @@ class StateService():
     def get_states(self):
         states = self.state_repository.get_all_states()
         serializer = StateSerializer(states, many=True)
+        print(serializer.data)
         return serializer.data
 
     def delete_state(self, state_id):
-        state = self.repository.delete_state(state_id)
-        serializer = StateSerializer(state)
-        return serializer.data
+        state = self.state_repository.delete_state(state_id)
 
     
